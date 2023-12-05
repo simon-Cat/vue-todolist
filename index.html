@@ -4,8 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vue todo</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 <body>
-    
+<div id="app">
+	<form v-on:submit.prevent="submitHandler">
+		<label for="name">Добавить задачу</label>
+		<br>
+		<input id="name" type="text" v-model="todo">
+		<button type="submit">Добавить</button>
+	</form>
+	<ul class="todo-container">
+		<li v-for="todo in todos">
+			{{ todo.title }}
+			<button type="button" :key="todo.id" v-on:click="removeTodoHandler(todo.id)">Удалить</button>
+		</li>
+		<div v-if="!todos.length">Пока у вас нет ни одной задачи</div>
+	</ul>
+</div>
+
+<script>
+
+  const { createApp } = Vue
+
+  createApp({
+    data() {
+			return {
+				todo: null,
+				todos: []
+			}
+		},
+		methods: {
+			submitHandler() {
+				if(!this.todo) {
+					return;
+				}
+				this.todos.push({
+					id: `id-${this.todo}-${this.todos.length}`,
+					title: this.todo
+				});
+				this.todo = null;
+			},
+			removeTodoHandler(id) {
+				this.todos = this.todos.filter((todo) => todo.id !== id)
+			}
+		}
+  }).mount('#app')
+</script>
 </body>
 </html>
