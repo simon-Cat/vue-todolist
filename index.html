@@ -24,7 +24,7 @@
 			<template v-else>
 				<input type="text" v-model="tempValue">
 				<button type="button" v-on:click="saveNewValueHandler(todo.id)">Сохранить</button>
-				<button type="button" v-on:click="editTodoHandler(todo.id)">Отменить</button>
+				<button type="button" v-on:click="cancelSaveHandler(todo.id)">Отменить</button>
 			</template>
 		</li>
 		<div v-if="!todos.length">Пока у вас нет ни одной задачи</div>
@@ -72,7 +72,15 @@
 				this.todo.title = this.tempValue;
 				this.todo.id = `id-${this.tempValue}-${this.todos.length}`
 				this.todo.editable = false;
-				
+
+				this.todo = null;
+				this.tempValue = null;
+			},
+			cancelSaveHandler(id) {
+				this.todo = this.todos.filter((todo) => todo.id === id)[0];
+
+				this.todo.editable = false;
+
 				this.todo = null;
 				this.tempValue = null;
 			}
