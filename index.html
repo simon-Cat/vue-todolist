@@ -15,9 +15,17 @@
 		<button type="submit">Добавить</button>
 	</form>
 	<ul class="todo-container">
-		<li v-for="todo in todos">
-			{{ todo.title }}
-			<button type="button" :key="todo.id" v-on:click="removeTodoHandler(todo.id)">Удалить</button>
+		<li v-for="todo in todos" :key="todo.id" >
+			<template v-if="!todo.editable">
+				<span >{{ todo.title }}</span>
+				<button type="button" v-on:click="removeTodoHandler(todo.id)">Удалить</button>
+				<button type="button" v-on:click="editTodoHandler(todo.id)">Редактировать</button>
+			</template>
+			<template v-else>
+				<input type="text" v-model="tempValue">
+				<button type="button" v-on:click="saveNewValueHandler(todo.id)">Сохранить</button>
+				<button type="button" v-on:click="editTodoHandler(todo.id)">Отменить</button>
+			</template>
 		</li>
 		<div v-if="!todos.length">Пока у вас нет ни одной задачи</div>
 	</ul>
@@ -25,11 +33,12 @@
 
 <script>
 
-  const { createApp } = Vue
+  const { createApp, toRaw } = Vue
 
   createApp({
     data() {
 			return {
+				tempValue: null,
 				todo: null,
 				todos: []
 			}
@@ -41,12 +50,31 @@
 				}
 				this.todos.push({
 					id: `id-${this.todo}-${this.todos.length}`,
-					title: this.todo
+					title: this.todo,
+					editable: false
 				});
 				this.todo = null;
 			},
 			removeTodoHandler(id) {
-				this.todos = this.todos.filter((todo) => todo.id !== id)
+				this.todos = this.todos.filter((todo) => todo.id !== id);
+			},
+			editTodoHandler(id) {
+				this.todo = this.todos.filter((todo) => todo.id === id)[0];
+				this.todo.editable = true;
+				this.tempValue = this.todo.title;
+			},
+			changeHandler(e) {
+				this.tempValue = e.target.value;
+			},
+			saveNewValueHandler(id) {
+				this.todo = this.todos.filter((todo) => todo.id === id)[0];
+
+				this.todo.title = this.tempValue;
+				this.todo.id = `id-${this.tempValue}-${this.todos.length}`
+				this.todo.editable = false;
+				
+				this.todo = null;
+				this.tempValue = null;
 			}
 		}
   }).mount('#app')
