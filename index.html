@@ -4,30 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vue todo</title>
+	<script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 <body>
 <div id="app">
 	<form v-on:submit.prevent="submitHandler">
-		<label for="name">Добавить задачу</label>
+		<label for="name" class="text-4xl flex justify-center pt-5 pb-6">Добавить задачу</label>
 		<br>
-		<input id="name" type="text" v-model="todo">
-		<button type="submit">Добавить</button>
+		<div class="flex justify-center mb-5">
+			<input class="mr-5 border-2 border-black rounded" id="name" type="text" v-model="todo">
+			<button type="submit">Добавить</button>
+		</div>
 	</form>
 	<ul class="todo-container">
-		<li v-for="todo in todos" :key="todo.id" >
+		<li v-for="todo in todos" :key="todo.id" class="flex justify-center pb-2 divide-y-2">
 			<template v-if="!todo.editable">
-				<span >{{ todo.title }}</span>
-				<button type="button" v-on:click="removeTodoHandler(todo.id)">Удалить</button>
-				<button type="button" v-on:click="editTodoHandler(todo.id)">Редактировать</button>
+				<span class="mr-2 p-3">{{ todo.title }}</span>
+				<button class="mr-2 p-3" v-bind:disabled="todo.disabled" type="button" v-on:click="removeTodoHandler(todo.id)">Удалить</button>
+				<button class="mr-0 p-2" v-bind:disabled="todo.disabled" type="button" v-on:click="editTodoHandler(todo.id)">Редактировать</button>
 			</template>
 			<template v-else>
-				<input type="text" v-model="tempValue">
-				<button type="button" v-on:click="saveNewValueHandler(todo.id)">Сохранить</button>
-				<button type="button" v-on:click="cancelSaveHandler(todo.id)">Отменить</button>
-			</template>
+				<input class="mr-2" type="text" v-model="tempValue">
+				<button class="mr-2 p-2" type="button" v-on:click="saveNewValueHandler(todo.id)">Сохранить</button>
+				<button class="mr-0 p-2" type="button" v-on:click="cancelSaveHandler(todo.id)">Отменить</button>
+			</template
 		</li>
-		<div v-if="!todos.length">Пока у вас нет ни одной задачи</div>
+		<div class="text-2xl flex justify-center pt-5 pb-6" v-if="!todos.length">Пока у вас нет ни одной задачи</div>
 	</ul>
 </div>
 
@@ -51,7 +54,8 @@
 				this.todos.push({
 					id: `id-${this.todo}-${this.todos.length}`,
 					title: this.todo,
-					editable: false
+					editable: false,
+					disabled: false
 				});
 				this.todo = null;
 			},
@@ -59,9 +63,12 @@
 				this.todos = this.todos.filter((todo) => todo.id !== id);
 			},
 			editTodoHandler(id) {
+				this.disableButtons();
+
 				this.todo = this.todos.filter((todo) => todo.id === id)[0];
 				this.todo.editable = true;
 				this.tempValue = this.todo.title;
+				this.todo = null;
 			},
 			changeHandler(e) {
 				this.tempValue = e.target.value;
@@ -83,6 +90,14 @@
 
 				this.todo = null;
 				this.tempValue = null;
+			},
+			disableButtons() {
+				this.todos.forEach(todo => {
+					if(todo.editable) {
+						return
+					}
+					todo.disabled = true;
+				});
 			}
 		}
   }).mount('#app')
