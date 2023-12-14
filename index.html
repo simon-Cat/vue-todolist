@@ -13,8 +13,8 @@
 		<label for="name" class="text-4xl flex justify-center pt-5 pb-6">Добавить задачу</label>
 		<br>
 		<div class="flex justify-center mb-5">
-			<input class="mr-5 border-2 border-black rounded" id="name" type="text" v-model="todo">
-			<button type="submit">Добавить</button>
+			<input v-bind:disabled="isTodosHaveEditable" class="mr-5 border-2 border-black rounded" id="name" type="text" v-model="todo">
+			<button v-bind:disabled="isTodosHaveEditable" type="submit">Добавить</button>
 		</div>
 	</form>
 	<ul class="todo-container">
@@ -30,8 +30,8 @@
 				<button class="mr-0 p-2" type="button" v-on:click="cancelSaveHandler(todo.id)">Отменить</button>
 			</template
 		</li>
-		<div class="text-2xl flex justify-center pt-5 pb-6" v-if="!todos.length">Пока у вас нет ни одной задачи</div>
 	</ul>
+	<div class="text-2xl flex justify-center pt-5 pb-6" v-if="!todos.length">Пока у вас нет ни одной задачи</div>
 </div>
 
 <script>
@@ -44,6 +44,11 @@
 				tempValue: null,
 				todo: null,
 				todos: []
+			}
+		},
+		computed: {
+			isTodosHaveEditable() {
+				return this.todos.some(todo => todo.editable === true);
 			}
 		},
 		methods: {
@@ -63,12 +68,12 @@
 				this.todos = this.todos.filter((todo) => todo.id !== id);
 			},
 			editTodoHandler(id) {
-				this.disableButtons();
-
 				this.todo = this.todos.filter((todo) => todo.id === id)[0];
 				this.todo.editable = true;
 				this.tempValue = this.todo.title;
 				this.todo = null;
+
+				this.disableButtons();
 			},
 			changeHandler(e) {
 				this.tempValue = e.target.value;
@@ -82,6 +87,8 @@
 
 				this.todo = null;
 				this.tempValue = null;
+
+				this.enableButtons();
 			},
 			cancelSaveHandler(id) {
 				this.todo = this.todos.filter((todo) => todo.id === id)[0];
@@ -90,13 +97,27 @@
 
 				this.todo = null;
 				this.tempValue = null;
+
+				this.enableButtons();
 			},
 			disableButtons() {
 				this.todos.forEach(todo => {
-					if(todo.editable) {
-						return
+					if(!todo.editable) {
+						todo.disabled = true;
+					} else {
+						return;
 					}
-					todo.disabled = true;
+					
+				});
+			},
+			enableButtons() {
+				console.log('11')
+				this.todos.forEach(todo => {
+					if(todo.disabled) {
+						todo.disabled = false;
+					} else {
+						return;
+					}
 				});
 			}
 		}
