@@ -6,18 +6,18 @@
     <title>Vue todo</title>
 	<script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<script src="https://unpkg.com/vue-router@4"></script>
 </head>
 <body>
 <div id="app">
-	<form v-on:submit.prevent="submitHandler">
-		<label for="name" class="text-4xl flex justify-center pt-5 pb-6">Добавить задачу</label>
-		<br>
-		<div class="flex justify-center mb-5">
-			<input v-bind:disabled="isTodosHaveEditable" class="mr-5 border-2 border-black rounded" id="name" type="text" v-model="todo">
-			<button v-bind:disabled="isTodosHaveEditable" type="submit">Добавить</button>
-		</div>
-	</form>
-	<ul class="todo-container">
+	<nav>
+		<ul class="flex justify-end gap-x-4 px-4">
+			<li>В работе</li>
+			<li>Завершенные</li>
+		</ul>
+	</nav>
+	<todo-form @submit-form="submitHandler"></todo-form>
+	<ul v-if="todos.length" class="todo-container">
 		<li v-for="todo in todos" :key="todo.id" class="flex justify-center pb-2 divide-y-2">
 			<template v-if="!todo.editable">
 				<span class="mr-2 p-3">{{ todo.title }}</span>
@@ -31,97 +31,9 @@
 			</template
 		</li>
 	</ul>
-	<div class="text-2xl flex justify-center pt-5 pb-6" v-if="!todos.length">Пока у вас нет ни одной задачи</div>
+	<div class="text-2xl flex justify-center pt-5 pb-6" v-else="!todos.length">Пока у вас нет ни одной задачи</div>
 </div>
 
-<script>
-
-  const { createApp, toRaw } = Vue
-
-  createApp({
-    data() {
-			return {
-				tempValue: null,
-				todo: null,
-				todos: []
-			}
-		},
-		computed: {
-			isTodosHaveEditable() {
-				return this.todos.some(todo => todo.editable === true);
-			}
-		},
-		methods: {
-			submitHandler() {
-				if(!this.todo) {
-					return;
-				}
-				this.todos.push({
-					id: `id-${this.todo}-${this.todos.length}`,
-					title: this.todo,
-					editable: false,
-					disabled: false
-				});
-				this.todo = null;
-			},
-			removeTodoHandler(id) {
-				this.todos = this.todos.filter((todo) => todo.id !== id);
-			},
-			editTodoHandler(id) {
-				this.todo = this.todos.filter((todo) => todo.id === id)[0];
-				this.todo.editable = true;
-				this.tempValue = this.todo.title;
-				this.todo = null;
-
-				this.disableButtons();
-			},
-			changeHandler(e) {
-				this.tempValue = e.target.value;
-			},
-			saveNewValueHandler(id) {
-				this.todo = this.todos.filter((todo) => todo.id === id)[0];
-
-				this.todo.title = this.tempValue;
-				this.todo.id = `id-${this.tempValue}-${this.todos.length}`
-				this.todo.editable = false;
-
-				this.todo = null;
-				this.tempValue = null;
-
-				this.enableButtons();
-			},
-			cancelSaveHandler(id) {
-				this.todo = this.todos.filter((todo) => todo.id === id)[0];
-
-				this.todo.editable = false;
-
-				this.todo = null;
-				this.tempValue = null;
-
-				this.enableButtons();
-			},
-			disableButtons() {
-				this.todos.forEach(todo => {
-					if(!todo.editable) {
-						todo.disabled = true;
-					} else {
-						return;
-					}
-					
-				});
-			},
-			enableButtons() {
-				console.log('11')
-				this.todos.forEach(todo => {
-					if(todo.disabled) {
-						todo.disabled = false;
-					} else {
-						return;
-					}
-				});
-			}
-		}
-  }).mount('#app')
-</script>
+<script type="module" src="index.js"></script>
 </body>
 </html>
