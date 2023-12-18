@@ -17,7 +17,8 @@
 		</ul>
 	</nav>
 	<todo-form v-bind:is-disabled="isTodosHaveEditable" @submit-form="submitHandler"></todo-form>
-	<ul v-if="todos.length" class="todo-container">
+	<todo-list v-bind:todos="todos" @remove-item="removeTodoHandler"></todo-list>
+	<!-- <ul v-if="todos.length" class="todo-container">
 		<li v-for="todo in todos" :key="todo.id" class="flex justify-center pb-2 divide-y-2">
 			<template v-if="!todo.editable">
 				<span class="mr-2 p-3">{{ todo.title }}</span>
@@ -30,8 +31,8 @@
 				<button class="mr-0 p-2" type="button" v-on:click="cancelSaveHandler(todo.id)">Отменить</button>
 			</template
 		</li>
-	</ul>
-	<div class="text-2xl flex justify-center pt-5 pb-6" v-else="!todos.length">Пока у вас нет ни одной задачи</div>
+	</ul> -->
+	
 </div>
 
 <script type="module" src="index.js"></script>

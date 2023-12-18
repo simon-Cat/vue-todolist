@@ -1,4 +1,5 @@
-import TodoForm from "./TodoForm.js";
+import TodoForm from "./components/TodoForm.js";
+import TodoList from "./components/TodoList.js";
 
 export default {
     data() {
@@ -8,7 +9,8 @@ export default {
         }
     },
 		components: {
-			TodoForm
+			TodoForm,
+			TodoList
 		},
 		computed: {
 			isTodosHaveEditable() {
