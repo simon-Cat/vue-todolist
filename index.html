@@ -16,7 +16,7 @@
 			<li>Завершенные</li>
 		</ul>
 	</nav>
-	<todo-form @submit-form="submitHandler"></todo-form>
+	<todo-form v-bind:is-disabled="isTodosHaveEditable" @submit-form="submitHandler"></todo-form>
 	<ul v-if="todos.length" class="todo-container">
 		<li v-for="todo in todos" :key="todo.id" class="flex justify-center pb-2 divide-y-2">
 			<template v-if="!todo.editable">

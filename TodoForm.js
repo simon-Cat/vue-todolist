@@ -1,4 +1,5 @@
 export default {
+    props: ['isDisabled'],
     emits: ['submit-form'],
     data() {
         return {
@@ -9,8 +10,8 @@ export default {
         <label for="name" class="text-4xl flex justify-center pt-5 pb-6">Добавить задачу</label>
         <br>
         <div class="flex justify-center mb-5">
-            <input v-model="todo" class="mr-5 border-2 border-black rounded" id="name" type="text">
-            <button type="submit">Добавить</button>
+            <input v-bind:disabled="isDisabled" v-model="todo" class="mr-5 border-2 border-black rounded" id="name" type="text">
+            <button v-bind:disabled="isDisabled" type="submit">Добавить</button>
         </div>
     </form>`,
     methods: {
