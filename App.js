@@ -4,6 +4,7 @@ import TodoList from "./components/TodoList.js";
 export default {
     data() {
         return {
+			todo: null,
             tempValue: null,
             todos: []
         }
@@ -40,18 +41,16 @@ export default {
 
 				this.disableButtons();
 			},
-			changeHandler(e) {
-				this.tempValue = e.target.value;
-			},
-			saveNewValueHandler(id) {
+			// changeHandler(e) {
+			// 	this.tempValue = e.target.value;
+			// },
+			saveNewValueHandler(id, newValue) {
 				this.todo = this.todos.filter((todo) => todo.id === id)[0];
-
-				this.todo.title = this.tempValue;
-				this.todo.id = `id-${this.tempValue}-${this.todos.length}`
+				this.todo.title = newValue;
+				this.todo.id = `id-${newValue}-${this.todos.length}`
 				this.todo.editable = false;
 
 				this.todo = null;
-				this.tempValue = null;
 
 				this.enableButtons();
 			},
@@ -76,7 +75,6 @@ export default {
 				});
 			},
 			enableButtons() {
-				console.log('11')
 				this.todos.forEach(todo => {
 					if(todo.disabled) {
 						todo.disabled = false;
