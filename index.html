@@ -21,7 +21,8 @@
 		v-bind:todos="todos"
 		@remove-item="removeTodoHandler"
 		@edit-item="editTodoHandler"
-		@save-changes="saveNewValueHandler">
+		@save-changes="saveNewValueHandler"
+		@cancel-changes="cancelChangesHandler">
 	</todo-list>
 	<!-- <ul v-if="todos.length" class="todo-container">
 		<li v-for="todo in todos" :key="todo.id" class="flex justify-center pb-2 divide-y-2">

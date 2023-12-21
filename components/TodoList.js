@@ -1,8 +1,9 @@
 const TodoItem = {
     props: ['todo'],
+    emits: ['remove-item', 'edit-item', 'save-changes', 'cancel-changes'],
     data() {
         return {
-            newValue: null
+            newValue: this.todo.title
         }
     },
     template: `
@@ -15,7 +16,7 @@ const TodoItem = {
     <template v-else>
         <input class="mr-2" type="text" v-model="newValue">
         <button class="mr-2 p-2" @click="$emit('save-changes', todo.id, newValue)" type="button">Сохранить</button>
-        <button class="mr-0 p-2" type="button">Отменить</button>
+        <button class="mr-0 p-2" @click="$emit('cancel-changes', todo.id)" type="button">Отменить</button>
     </template>
 </li>
     `
@@ -23,7 +24,7 @@ const TodoItem = {
 
 export default {
     props: ['todos'],
-    emits: ['remove-item', 'edit-item', 'save-changes'],
+    emits: ['remove-item', 'edit-item', 'save-changes', 'cancel-changes'],
     components: {
         TodoItem
     },
@@ -36,6 +37,9 @@ export default {
         },
         saveItemChanges(id, newValue) {
             this.$emit('save-changes', id, newValue);
+        },
+        cancelItemChanges(id) {
+            this.$emit('cancel-changes', id);
         }
     },
     template: `
@@ -46,7 +50,8 @@ export default {
                 v-bind:todo="todo" 
                 @remove-item="removeItem" 
                 @edit-item="editItem"
-                @save-changes="saveItemChanges">
+                @save-changes="saveItemChanges"
+                @cancel-changes="cancelItemChanges">
             </todo-item>
         </ul>
         <div class="text-2xl flex justify-center pt-5 pb-6" v-else="!todos.length">Пока у вас нет ни одной задачи</div> 

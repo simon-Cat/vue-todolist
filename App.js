@@ -41,9 +41,6 @@ export default {
 
 				this.disableButtons();
 			},
-			// changeHandler(e) {
-			// 	this.tempValue = e.target.value;
-			// },
 			saveNewValueHandler(id, newValue) {
 				this.todo = this.todos.filter((todo) => todo.id === id)[0];
 				this.todo.title = newValue;
@@ -54,13 +51,12 @@ export default {
 
 				this.enableButtons();
 			},
-			cancelSaveHandler(id) {
+			cancelChangesHandler(id) {
 				this.todo = this.todos.filter((todo) => todo.id === id)[0];
 
 				this.todo.editable = false;
 
 				this.todo = null;
-				this.tempValue = null;
 
 				this.enableButtons();
 			},
