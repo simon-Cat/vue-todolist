@@ -1,18 +1,34 @@
-import TodoForm from "./components/TodoForm.js";
-import TodoList from "./components/TodoList.js";
+// import TodoForm from "./components/TodoForm.js";
+// import TodoList from "./components/TodoList.js";
 
 export default {
     data() {
         return {
-			todo: null,
-            tempValue: null,
+			// todo: null,
+            // tempValue: null,
             todos: []
         }
     },
-		components: {
-			TodoForm,
-			TodoList
-		},
+	template: `
+	<nav>
+		<ul class="flex justify-center gap-x-4 px-4">
+			<router-link to="/">App</router-link>
+			<router-link to="/current">Current</router-link>
+		</ul>
+	</nav>
+	<router-view v-slot="{ Component }">
+		<component
+		:is="Component"
+		:todos="todos"
+		:isTodosHaveEditable="isTodosHaveEditable"
+		@submit-form="submitHandler"
+		@remove-item="removeTodoHandler"
+		@edit-item="editTodoHandler"
+		@save-changes="saveNewValueHandler"
+		@cancel-changes="cancelChangesHandler"
+	/>
+	</router-view>
+	`,
 		computed: {
 			isTodosHaveEditable() {
 				return this.todos.some(todo => todo.editable === true);
@@ -78,6 +94,10 @@ export default {
 						return;
 					}
 				});
+			},
+			goHome() {
+				console.log($router);
+				this.$router.push('/home');
 			}
 		}
 };
