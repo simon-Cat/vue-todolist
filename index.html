@@ -9,37 +9,7 @@
 	<script src="https://unpkg.com/vue-router@4"></script>
 </head>
 <body>
-<div id="app">
-	<!-- <nav>
-		<ul class="flex justify-end gap-x-4 px-4">
-			<li>В работе</li>
-			<li>Завершенные</li>
-		</ul>
-	</nav>
-	<todo-form v-bind:is-disabled="isTodosHaveEditable" @submit-form="submitHandler"></todo-form>
-	<todo-list
-		v-bind:todos="todos"
-		@remove-item="removeTodoHandler"
-		@edit-item="editTodoHandler"
-		@save-changes="saveNewValueHandler"
-		@cancel-changes="cancelChangesHandler">
-	</todo-list> -->
-	<!-- <ul v-if="todos.length" class="todo-container">
-		<li v-for="todo in todos" :key="todo.id" class="flex justify-center pb-2 divide-y-2">
-			<template v-if="!todo.editable">
-				<span class="mr-2 p-3">{{ todo.title }}</span>
-				<button class="mr-2 p-3" v-bind:disabled="todo.disabled" type="button" v-on:click="removeTodoHandler(todo.id)">Удалить</button>
-				<button class="mr-0 p-2" v-bind:disabled="todo.disabled" type="button" v-on:click="editTodoHandler(todo.id)">Редактировать</button>
-			</template>
-			<template v-else>
-				<input class="mr-2" type="text" v-model="tempValue">
-				<button class="mr-2 p-2" type="button" v-on:click="saveNewValueHandler(todo.id)">Сохранить</button>
-				<button class="mr-0 p-2" type="button" v-on:click="cancelSaveHandler(todo.id)">Отменить</button>
-			</template
-		</li>
-	</ul> -->
-	
-</div>
+<div id="app"></div>
 
 <script type="module" src="index.js"></script>
 </body>

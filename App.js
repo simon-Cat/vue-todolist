@@ -1,19 +1,15 @@
-// import TodoForm from "./components/TodoForm.js";
-// import TodoList from "./components/TodoList.js";
-
 export default {
     data() {
         return {
-			// todo: null,
-            // tempValue: null,
             todos: []
-        }
+		}
     },
 	template: `
 	<nav>
 		<ul class="flex justify-center gap-x-4 px-4">
 			<router-link to="/">App</router-link>
 			<router-link to="/current">Current</router-link>
+			<router-link to="/finished">Finished</router-link>
 		</ul>
 	</nav>
 	<router-view v-slot="{ Component }">
@@ -21,17 +17,23 @@ export default {
 		:is="Component"
 		:todos="todos"
 		:isTodosHaveEditable="isTodosHaveEditable"
+		:finishedTodos="finishedTodos"
 		@submit-form="submitHandler"
 		@remove-item="removeTodoHandler"
 		@edit-item="editTodoHandler"
 		@save-changes="saveNewValueHandler"
 		@cancel-changes="cancelChangesHandler"
+		@set-done="setDoneTodo"
+		@set-undone="setUndoneTodo"
 	/>
 	</router-view>
 	`,
 		computed: {
 			isTodosHaveEditable() {
 				return this.todos.some(todo => todo.editable === true);
+			},
+			finishedTodos() {
+				return this.todos.filter(todo => todo.isDone === true);
 			}
 		},
 		methods: {
@@ -43,7 +45,8 @@ export default {
 					id: `id-${todo}-${this.todos.length}`,
 					title: todo,
 					editable: false,
-					disabled: false
+					disabled: false,
+					isDone: false
 				});
 			},
 			removeTodoHandler(id) {
@@ -95,9 +98,23 @@ export default {
 					}
 				});
 			},
-			goHome() {
-				console.log($router);
-				this.$router.push('/home');
+			setDoneTodo(id) {
+				this.todos = this.todos.map(todo => {
+					if(todo.id === id) {
+						todo.isDone = true;
+						return todo;
+					}
+					return todo;
+				});
+			}, 
+			setUndoneTodo(id) {
+				this.todos = this.todos.map(todo => {
+					if(todo.id === id) {
+						todo.isDone = false;
+						return todo;
+					}
+					return todo;
+				})
 			}
 		}
 };

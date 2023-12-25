@@ -1,7 +1,7 @@
 import TodoList from "../components/TodoList.js";
 
 export default {
-    emits: ['remove-item', 'edit-item', 'save-changes', 'cancel-changes'],
+    emits: ['remove-item', 'edit-item', 'save-changes', 'cancel-changes', 'set-done'],
     props: ['todos'],
     components: {
         TodoList
@@ -16,8 +16,11 @@ export default {
         saveHandler(id, newValue) {
             this.$emit('save-changes', id, newValue);
         }, 
-        cncelHandler(id) {
+        cancelHandler(id) {
             this.$emit('cancel-item', id);
+        },
+        setDoneHandler(id) {
+            this.$emit('set-done', id)
         }
     },
     template: `
@@ -26,7 +29,8 @@ export default {
 		@remove-item="removeHandler"
 		@edit-item="editHandler"
 		@save-changes="saveHandler"
-		@cancel-changes="cncelHandler">
+		@cancel-changes="cancelHandler"
+        @set-done="setDoneHandler">
 	</todo-list>
     `
 };
