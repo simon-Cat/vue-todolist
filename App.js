@@ -1,3 +1,5 @@
+import CountLable from "./components/CountLable.js";
+
 export default {
     data() {
         return {
@@ -6,10 +8,18 @@ export default {
     },
 	template: `
 	<nav>
-		<ul class="flex justify-center gap-x-4 px-4">
-			<router-link to="/">App</router-link>
-			<router-link to="/current">Current</router-link>
-			<router-link to="/finished">Finished</router-link>
+		<ul class="flex justify-center gap-x-4 px-4 py-10">
+			<li>
+				<router-link to="/">App</router-link>
+			</li>
+			<li class="relative">
+				<count-lable v-bind:todosCount="todos.length"></count-lable>
+				<router-link to="/current">Current</router-link>
+			</li>
+			<li class="relative">
+				<count-lable v-bind:todosCount="finishedTodos.length"></count-lable>
+				<router-link to="/finished">Finished</router-link>	
+			</li>
 		</ul>
 	</nav>
 	<router-view v-slot="{ Component }">
@@ -37,6 +47,9 @@ export default {
 			finishedTodos() {
 				return this.todos.filter(todo => todo.isDone === true);
 			}
+		},
+		components: {
+			CountLable
 		},
 		methods: {
 			submitHandler(todo) {
