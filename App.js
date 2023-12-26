@@ -13,19 +13,21 @@ export default {
 		</ul>
 	</nav>
 	<router-view v-slot="{ Component }">
-		<component
-		:is="Component"
-		:todos="todos"
-		:isTodosHaveEditable="isTodosHaveEditable"
-		:finishedTodos="finishedTodos"
-		@submit-form="submitHandler"
-		@remove-item="removeTodoHandler"
-		@edit-item="editTodoHandler"
-		@save-changes="saveNewValueHandler"
-		@cancel-changes="cancelChangesHandler"
-		@set-done="setDoneTodo"
-		@set-undone="setUndoneTodo"
-	/>
+		<transition>
+			<component
+				:is="Component"
+				:todos="todos"
+				:isTodosHaveEditable="isTodosHaveEditable"
+				:finishedTodos="finishedTodos"
+				@submit-form="submitHandler"
+				@remove-item="removeTodoHandler"
+				@edit-item="editTodoHandler"
+				@save-changes="saveNewValueHandler"
+				@cancel-changes="cancelChangesHandler"
+				@set-done="setDoneTodo"
+				@set-undone="setUndoneTodo"
+			/>
+		</transition>
 	</router-view>
 	`,
 		computed: {
