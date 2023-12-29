@@ -7,7 +7,7 @@ const TodoItem = {
         }
     },
     template: `
-    <li class="flex justify-center pb-2 divide-y-2">
+    <li class="flex justify-center pb-2">
     <template v-if="!todo.editable">
         <span class="mr-2 p-3">{{ todo.title }}</span>
         <button class="mr-2 p-3" v-bind:disabled="todo.disabled" @click="$emit('remove-item', todo.id)" type="button">Удалить</button>

@@ -7,18 +7,20 @@ export default {
 		}
     },
 	template: `
-	<nav>
-		<ul class="flex justify-center gap-x-4 px-4 py-10">
+	<nav class="bg-teal-700">
+		<ul class="flex justify-center gap-x-10 px-4 py-10 text-lg">
 			<li>
-				<router-link to="/">App</router-link>
+				<router-link to="/"
+					class="transition-all bg-teal-600 text-white hover:bg-teal-100 hover:text-teal-600 p-3 rounded shadow-xl">
+						Create new todo</router-link>
 			</li>
 			<li class="relative">
 				<count-lable v-bind:todosCount="todos.length"></count-lable>
-				<router-link to="/current">Current</router-link>
+				<router-link to="/current" class="transition-all bg-teal-600 text-white hover:bg-white hover:text-teal-600 p-3 rounded shadow-xl">Current todos</router-link>
 			</li>
 			<li class="relative">
 				<count-lable v-bind:todosCount="finishedTodos.length"></count-lable>
-				<router-link to="/finished">Finished</router-link>	
+				<router-link to="/finished" class="transition-all bg-teal-600 text-white hover:bg-white hover:text-teal-600 p-3 rounded shadow-xl">Finished todos</router-link>	
 			</li>
 		</ul>
 	</nav>
