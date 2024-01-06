@@ -16,7 +16,7 @@ export default {
 			</li>
 			<li class="relative">
 				<count-lable v-bind:todosCount="todos.length"></count-lable>
-				<router-link to="/current" class="transition-all bg-teal-600 text-white hover:bg-white hover:text-teal-600 p-3 rounded shadow-xl">Current todos</router-link>
+				<router-link to="/current" class="transition-all bg-teal-600 text-white hover:bg-white hover:text-teal-600 p-3 rounded P">Current todos</router-link>
 			</li>
 			<li class="relative">
 				<count-lable v-bind:todosCount="finishedTodos.length"></count-lable>
