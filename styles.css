@@ -1,18 +1,56 @@
+/* vue transitions classes */
 .v-enter-from {
   opacity: 0;
 }
 
 .v-enter-to,
-.v-leave-from  {
+.v-leave-from {
   opacity: 1;
 }
 
 .v-enter-active,
 .v-leave-active {
-  transition: opacity .5s ease;
+  transition: opacity 0.5s ease;
 }
 
 .v-leave-to {
   opacity: 0;
   display: none;
+}
+
+.todo-list {
+  display: flex;
+}
+
+.todo-list_mode_list {
+  flex-direction: column;
+  margin: 0 auto;
+  justify-content: center;
+  gap: 15px;
+}
+
+.todo-list_mode_cards {
+  gap: 25px;
+  flex-wrap: wrap;
+  margin: 0 auto;
+  margin-top: 50px;
+  max-width: 80%;
+  justify-content: center;
+}
+
+.todo-item {
+  border: 2px solid #8aa6e8;
+  border-radius: 10px;
+}
+
+.todo-item_mode_list {
+  max-width: 250px;
+  margin: 0 auto;
+  display: flex;
+  min-width: 500px;
+}
+
+.todo-item_mode_cards {
+  max-width: 350px;
+  padding: 10px;
 }

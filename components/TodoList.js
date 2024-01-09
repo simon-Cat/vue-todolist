@@ -1,5 +1,5 @@
 const TodoItem = {
-    props: ['todo'],
+    props: ['todo', 'mode'],
     emits: ['remove-item', 'edit-item', 'save-changes', 'cancel-changes', 'set-done'],
     data() {
         return {
@@ -7,19 +7,21 @@ const TodoItem = {
         }
     },
     template: `
-    <li class="flex justify-center pb-2 divide-y-2">
-    <template v-if="!todo.editable">
-        <span class="mr-2 p-3">{{ todo.title }}</span>
-        <button class="mr-2 p-3" v-bind:disabled="todo.disabled" @click="$emit('remove-item', todo.id)" type="button">Удалить</button>
-        <button class="mr-0 p-2" v-bind:disabled="todo.disabled" @click="$emit('edit-item', todo.id)" type="button">Редактировать</button>
-        <button class="mr-0 p-2" v-bind:disabled="todo.disabled" @click="$emit('set-done', todo.id)" type="button">Пометить как выполненное</button>
-    </template>
-    <template v-else>
-        <input class="mr-2" type="text" v-model="newValue">
-        <button class="mr-2 p-2" @click="$emit('save-changes', todo.id, newValue)" type="button">Сохранить</button>
-        <button class="mr-0 p-2" @click="$emit('cancel-changes', todo.id)" type="button">Отменить</button>
-    </template>
-</li>
+    <li :class="[mode === 'cards' ? 'todo-item_mode_cards' : 'todo-item_mode_list', 'todo-item']">
+        <template v-if="!todo.editable">
+            <span class="mr-2 p-3">{{ todo.title }}</span>
+            <div>
+                <button class="mr-2 p-3" v-bind:disabled="todo.disabled" @click="$emit('remove-item', todo.id)" type="button">Удалить</button>
+                <button class="mr-0 p-2" v-bind:disabled="todo.disabled" @click="$emit('edit-item', todo.id)" type="button">Редактировать</button>
+                <button class="mr-0 p-2" v-bind:disabled="todo.disabled" @click="$emit('set-done', todo.id)" type="button">Пометить как выполненное</button>
+            </div>
+        </template>
+        <template v-else>
+            <input class="mr-2" type="text" v-model="newValue">
+            <button class="mr-2 p-2" @click="$emit('save-changes', todo.id, newValue)" type="button">Сохранить</button>
+            <button class="mr-0 p-2" @click="$emit('cancel-changes', todo.id)" type="button">Отменить</button>
+        </template>
+    </li>
     `
 };
 
@@ -28,6 +30,11 @@ export default {
     emits: ['remove-item', 'edit-item', 'save-changes', 'cancel-changes', 'set-done'],
     components: {
         TodoItem
+    },
+    data() {
+        return {
+            mode: 'list'
+        };
     },
     methods: {
         removeItem(id) {
@@ -44,21 +51,33 @@ export default {
         },
         setDoneHandler(id) {
             this.$emit('set-done', id);
+        },
+        changeListViewMode() {
+            if(this.mode === 'list') {
+                this.mode = 'cards';
+            } else {
+                this.mode = 'list';
+            }
         }
     },
     template: `
-        <ul v-if="todos.length" class="todo-container">
-            <todo-item 
-                v-for="todo in todos" 
-                :key="todo.id" 
-                v-bind:todo="todo" 
-                @remove-item="removeItem" 
-                @edit-item="editItem"
-                @save-changes="saveItemChanges"
-                @cancel-changes="cancelItemChanges"
-                @set-done="setDoneHandler">
-            </todo-item>
-        </ul>
-        <div class="text-2xl flex justify-center pt-5 pb-6" v-else="!todos.length">Пока у вас нет ни одной задачи</div> 
+        <div v-if="todos.length">
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" v-on:click="changeListViewMode">Change mode</button>
+            <ul class="py-6 todo-list" :class="[mode === 'cards' ? 'todo-list_mode_cards' : 'todo-list_mode_list']">
+                <todo-item 
+                    v-for="todo in todos" 
+                    :key="todo.id" 
+                    v-bind:todo="todo"
+                    v-bind:mode="mode" 
+                    @remove-item="removeItem" 
+                    @edit-item="editItem"
+                    @save-changes="saveItemChanges"
+                    @cancel-changes="cancelItemChanges"
+                    @set-done="setDoneHandler"
+                >
+                </todo-item>
+            </ul>
+        </div>
+        <div v-else class="text-2xl flex justify-center pt-5 pb-6">Пока у вас нет ни одной задачи</div> 
     `
 };
