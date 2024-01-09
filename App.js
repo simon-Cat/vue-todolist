@@ -1,12 +1,13 @@
 import CountLable from "./components/CountLable.js";
 
 export default {
-    data() {
-        return {
-            todos: []
-		}
-    },
-	template: `
+  data() {
+    return {
+      todos: [],
+      finishedTodos: [],
+    };
+  },
+  template: `
 	<nav class="bg-teal-700">
 		<ul class="flex justify-center gap-x-10 px-4 py-10 text-lg">
 			<li>
@@ -42,96 +43,86 @@ export default {
 		</transition>
 	</router-view>
 	`,
-		computed: {
-			isTodosHaveEditable() {
-				return this.todos.some(todo => todo.editable === true);
-			},
-			finishedTodos() {
-				return this.todos.filter(todo => todo.isDone === true);
-			}
-		},
-		components: {
-			CountLable
-		},
-		methods: {
-			submitHandler(todo) {
-				if(!todo) {
-					return;
-				}
-				this.todos.push({
-					id: `id-${todo}-${this.todos.length}`,
-					title: todo,
-					editable: false,
-					disabled: false,
-					isDone: false
-				});
-			},
-			removeTodoHandler(id) {
-				this.todos = this.todos.filter((todo) => todo.id !== id);
-			},
-			editTodoHandler(id) {
-				this.todo = this.todos.filter((todo) => todo.id === id)[0];
-				this.todo.editable = true;
-				this.tempValue = this.todo.title;
-				this.todo = null;
+  computed: {
+    isTodosHaveEditable() {
+      return this.todos.some((todo) => todo.editable === true);
+    },
+  },
+  components: {
+    CountLable,
+  },
+  methods: {
+    submitHandler(todo) {
+      if (!todo) {
+        return;
+      }
+      this.todos.push({
+        id: `id-${todo}-${this.todos.length}`,
+        title: todo,
+        editable: false,
+        disabled: false,
+        isDone: false,
+      });
+    },
+    removeTodoHandler(id) {
+      this.todos = this.todos.filter((todo) => todo.id !== id);
+    },
+    editTodoHandler(id) {
+      this.todo = this.todos.filter((todo) => todo.id === id)[0];
+      this.todo.editable = true;
+      this.tempValue = this.todo.title;
+      this.todo = null;
 
-				this.disableButtons();
-			},
-			saveNewValueHandler(id, newValue) {
-				this.todo = this.todos.filter((todo) => todo.id === id)[0];
-				this.todo.title = newValue;
-				this.todo.id = `id-${newValue}-${this.todos.length}`
-				this.todo.editable = false;
+      this.disableButtons();
+    },
+    saveNewValueHandler(id, newValue) {
+      this.todo = this.todos.filter((todo) => todo.id === id)[0];
+      this.todo.title = newValue;
+      this.todo.id = `id-${newValue}-${this.todos.length}`;
+      this.todo.editable = false;
 
-				this.todo = null;
+      this.todo = null;
 
-				this.enableButtons();
-			},
-			cancelChangesHandler(id) {
-				this.todo = this.todos.filter((todo) => todo.id === id)[0];
+      this.enableButtons();
+    },
+    cancelChangesHandler(id) {
+      this.todo = this.todos.filter((todo) => todo.id === id)[0];
 
-				this.todo.editable = false;
+      this.todo.editable = false;
 
-				this.todo = null;
+      this.todo = null;
 
-				this.enableButtons();
-			},
-			disableButtons() {
-				this.todos.forEach(todo => {
-					if(!todo.editable) {
-						todo.disabled = true;
-					} else {
-						return;
-					}
-					
-				});
-			},
-			enableButtons() {
-				this.todos.forEach(todo => {
-					if(todo.disabled) {
-						todo.disabled = false;
-					} else {
-						return;
-					}
-				});
-			},
-			setDoneTodo(id) {
-				this.todos = this.todos.map(todo => {
-					if(todo.id === id) {
-						todo.isDone = true;
-						return todo;
-					}
-					return todo;
-				});
-			}, 
-			setUndoneTodo(id) {
-				this.todos = this.todos.map(todo => {
-					if(todo.id === id) {
-						todo.isDone = false;
-						return todo;
-					}
-					return todo;
-				})
-			}
-		}
+      this.enableButtons();
+    },
+    disableButtons() {
+      this.todos.forEach((todo) => {
+        if (!todo.editable) {
+          todo.disabled = true;
+        } else {
+          return;
+        }
+      });
+    },
+    enableButtons() {
+      this.todos.forEach((todo) => {
+        if (todo.disabled) {
+          todo.disabled = false;
+        } else {
+          return;
+        }
+      });
+    },
+    setDoneTodo(id) {
+      const index = this.todos.findIndex((el) => el.id === id);
+      this.finishedTodos.push(this.todos[index]);
+      this.todos = this.todos.filter((todo, todoIndex) => todoIndex !== index);
+    },
+    setUndoneTodo(id) {
+      const index = this.finishedTodos.findIndex((el) => el.id === id);
+      this.todos.push(this.finishedTodos[index]);
+      this.finishedTodos = this.finishedTodos.filter(
+        (todo, todoIndex) => todoIndex !== index
+      );
+    },
+  },
 };

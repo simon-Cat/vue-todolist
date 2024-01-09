@@ -51,9 +51,7 @@ export default {
         },
         setDoneHandler(id) {
             this.$emit('set-done', id);
-        }
-    },
-    methods: {
+        },
         changeListViewMode() {
             if(this.mode === 'list') {
                 this.mode = 'cards';
@@ -63,9 +61,9 @@ export default {
         }
     },
     template: `
-        <template v-if="todos.length">
-            <button v-on:click="changeListViewMode">Change mode</button>
-            <ul class="todo-list" :class="[mode === 'cards' ? 'todo-list_mode_cards' : 'todo-list_mode_list']">
+        <div v-if="todos.length">
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" v-on:click="changeListViewMode">Change mode</button>
+            <ul class="py-6 todo-list" :class="[mode === 'cards' ? 'todo-list_mode_cards' : 'todo-list_mode_list']">
                 <todo-item 
                     v-for="todo in todos" 
                     :key="todo.id" 
@@ -75,11 +73,11 @@ export default {
                     @edit-item="editItem"
                     @save-changes="saveItemChanges"
                     @cancel-changes="cancelItemChanges"
-                    @set-done="setDoneHandler">
+                    @set-done="setDoneHandler"
+                >
                 </todo-item>
             </ul>
-        </template>
-
-        <div class="text-2xl flex justify-center pt-5 pb-6" v-else>Пока у вас нет ни одной задачи</div> 
+        </div>
+        <div v-else class="text-2xl flex justify-center pt-5 pb-6">Пока у вас нет ни одной задачи</div> 
     `
 };
